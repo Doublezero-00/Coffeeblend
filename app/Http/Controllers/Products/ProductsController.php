@@ -11,6 +11,12 @@ class ProductsController extends Controller
     public function singleProduct($id) {
 
         $product = Product::find($id);
-        return view('products.productsingle', compact('product'));
+        $related_products = Product::where('type', $product->type)
+                            ->where('id', '!=', $id)
+                            ->take('4')
+                            ->orderBy('id', 'desc')
+                            ->get();
+
+        return view('products.productsingle', compact('product', 'related_products'));
     }
 }
